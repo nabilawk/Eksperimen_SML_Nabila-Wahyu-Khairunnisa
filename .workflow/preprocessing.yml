@@ -1,0 +1,40 @@
+name: Preprocessing Automation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Ambil repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # 3. Install library
+      - name: Install dependencies
+        run: |
+          pip install pandas numpy scikit-learn
+
+      # 4. Jalankan preprocessing
+      - name: Run preprocessing script
+        run: |
+          python preprocessing/automate_Nabila-wahyu-khairunnisa.py
+
+      # 5. Commit hasil preprocessing
+      - name: Commit hasil preprocessing
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "update dataset preprocessing otomatis" || echo "No changes to commit"
+          git push
